@@ -20,3 +20,6 @@ contract StorageFactory {
     }
 }
 ```
+
+
+Hint: You use "shift + Enter" to move to a new line or to give spaces. Also put your code inside the 3 backticks ``` ```
