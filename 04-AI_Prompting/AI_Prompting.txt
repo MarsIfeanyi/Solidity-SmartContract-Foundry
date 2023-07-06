@@ -1,0 +1,9 @@
+
+6 Principles to prompt Engineering
+
+1. Write clear and specific instructions
+2. Give as much context as possible
+3. Use delimiters to clearly indicate distinct parts of the input
+4. Look out for hallucinations. hallucinations when an AI gives you an update the it thinks is right but it is clearly wrong.
+5. Understand the limitations of the AI. 
+6. Iterate constantly.
