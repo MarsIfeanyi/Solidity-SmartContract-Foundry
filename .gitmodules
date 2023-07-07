@@ -1,3 +1,6 @@
 [submodule "05-Foundry_SimpleStorage/lib/forge-std"]
 	path = 05-Foundry_SimpleStorage/lib/forge-std
 	url = https://github.com/foundry-rs/forge-std
+[submodule "06-Foundry_FundMe/lib/forge-std"]
+	path = 06-Foundry_FundMe/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
