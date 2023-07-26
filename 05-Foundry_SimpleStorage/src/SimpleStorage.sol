@@ -23,7 +23,7 @@ contract SimpleStorage {
     // Maps someones name to FavoriteNumber
     mapping(string => uint256) public nameToFavoriteNumber;
 
-    // function that stores and updates myFavoriteNumber.... Hint: Everytime you updates the state of a blockchain, is going to cost gas.
+    // function that stores and updates myFavoriteNumber.... Hint: Everytime you update/change the state of a blockchain, is going to cost gas ie it is a Write function.
     function store(uint256 _favoriteNumber) public {
         myFavoriteNumber = _favoriteNumber;
     }
@@ -34,9 +34,6 @@ contract SimpleStorage {
     }
 
     function addPerson(string memory _name, uint256 _favoriteNumber) public {
-        // Person memory newPerson = Person(_favoriteNumber, _name);
-        // listOfPeople.push(newPerson);
-
         // Adding _favoriteNumber and _name to the array
         listOfPeople.push(Person(_favoriteNumber, _name));
 
