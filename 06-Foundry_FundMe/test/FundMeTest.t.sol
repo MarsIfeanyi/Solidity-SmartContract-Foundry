@@ -20,7 +20,7 @@ contract FundMeTest is Test {
     function setUp() external {
         // FundMe fundMe = new FundMe(0x694AA1769357215DE4FAC081bf1f309aDC325306);
         DeployFundMe deployFundMe = new DeployFundMe();
-        fundMe = deployFundMe.run(); // Deploying the contract
+        fundMe = deployFundMe.run(); // Deploying the contract... Hint: The run() is defined in the DeployFundMe.s.sol script
         vm.deal(USER, STARTING_BALANCE);
     }
 
@@ -73,7 +73,7 @@ contract FundMeTest is Test {
         vm.prank(USER);
         fundMe.fund{value: SEND_VALUE}();
 
-        address funder = fundMe.getFunder(0);
+        address funder = fundMe.getFunder();
         assertEq(funder, USER);
     }
 
@@ -92,7 +92,7 @@ contract FundMeTest is Test {
     //     fundMe.withdraw();
     // }
 
-    // Hint:When we have multiple codes repeating in many places, the we can simple create a modifier which is reusable
+    // Hint:When we have multiple codes repeating in many places, then we can simply create a modifier which is reusable
 
     function testOnlyOwnerCanWithdraw() public funded {
         vm.prank(USER);
