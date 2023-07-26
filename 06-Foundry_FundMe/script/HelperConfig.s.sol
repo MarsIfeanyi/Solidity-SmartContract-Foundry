@@ -11,15 +11,15 @@ import {Script} from "forge-std/Script.sol";
 import {MockV3Aggregator} from "../test/mocks/MockV3Aggregator.sol";
 
 contract HelperConfig is Script {
-    // if we are on a local anvil, we deploy mocks otherwise, grab the existing address from the live network
+    struct NetworkConfig {
+        address priceFeed; // ETH/USD priceFeed address
+    }
+
+    // if we are on a local anvil, we deploy to mocks otherwise, grab the existing address from the live network
     NetworkConfig public activeNetworkConfig;
 
     uint8 public constant DECIMALS = 8;
     int256 public constant INITIAL_PRICE = 2000e8;
-
-    struct NetworkConfig {
-        address priceFeed; // ETH/USD priceFeed address
-    }
 
     constructor() {
         // block.chainid is a global varaible in solidity
@@ -55,11 +55,19 @@ contract HelperConfig is Script {
         // 1. Deploy the mocks
         // 2. Return the mock address
 
+        /**
+         * The Constructor of MockV3Aggregator 
+         * 
+         * constructor(uint8 _decimals, int256 _initialAnswer) {
+        decimals = _decimals;
+        updateAnswer(_initialAnswer); }
+         */
+
         vm.startBroadcast();
         MockV3Aggregator mockPriceFeed = new MockV3Aggregator(
             DECIMALS,
             INITIAL_PRICE
-        );
+        ); // These are the arguments that constructor needs
         vm.stopBroadcast();
 
         NetworkConfig memory anvilConfig = NetworkConfig({
