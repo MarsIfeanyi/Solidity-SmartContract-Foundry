@@ -4,17 +4,17 @@ pragma solidity ^0.8.18;
 import {AggregatorV3Interface} from "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
 import {PriceConverter} from "./PriceConverter.sol";
 
-error FundMe__NotOwner(); // Hint: Nice convention for naming your error errors is to add the name of the contract and __, This will help to easily know the contract where the error is coming from
+error FundMe__NotOwner(); // Hint: Nice convention for naming your errors is to add the name of the contract and __, This will help to easily know the contract where the error is coming from. This is a nice convention for error handling
 
 contract FundMe {
     using PriceConverter for uint256;
 
     // Hint: storage variables should start with s_variableName... VIP private variables are more gas efficient than public variables, thus we want to default all storage variables as private.
 
-    mapping(address => uint256) private s_addressToAmountFunded;
+    mapping(address => uint256) private s_addressToAmountFunded; // Hint: address is the key, while uint256 is the amount
 
     // Hint: You can also name your mapping
-    //mapping(address amount => uint256 amountFunded) public s_addressToAmountFunded;
+    //mapping(address userAddress => uint256 amountFunded) public s_addressToAmountFunded;
     address[] private s_funders;
 
     // Could we make this constant?  /* hint: no! We should make it immutable! */
@@ -23,7 +23,9 @@ contract FundMe {
 
     AggregatorV3Interface private s_priceFeed;
 
+    //Hint: We want the priceFeed to be dynamic and not hardcoded. Thus we pass the priceFeed as an argument to the constructor function upon deploying the contract.
     constructor(address priceFeed) {
+        // Initializing the state/storage variables
         i_owner = msg.sender;
         s_priceFeed = AggregatorV3Interface(priceFeed);
     }
@@ -60,7 +62,7 @@ contract FundMe {
 
         s_funders = new address[](0); // resetting the array
 
-        // call... Hint: Call forwards all gas or set gas, reurns bool
+        // call... Hint: Call forwards all gas or set gas, returns bool
         (bool callSuccess, ) = payable(msg.sender).call{
             value: address(this).balance
         }("");
@@ -82,7 +84,7 @@ contract FundMe {
     function getAddressToAmountFunded(
         address fundingAddress
     ) external view returns (uint256) {
-        return s_addressToAmountFunded[fundingAddress];
+        return s_addressToAmountFunded[fundingAddress]; // VIP: Given address(fundingAddress) as the "Key", then get the value(amountFunded)
     }
 
     function getFunder(uint256 index) external view returns (address) {
