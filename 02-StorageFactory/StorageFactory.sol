@@ -16,7 +16,7 @@ contract StorageFactory {
     function createSimpleStorageContract() public {
         // How does the storage factory know what simple storage looks like?
 
-        SimpleStorage simpleStorageContractVariable = new SimpleStorage(); // Hint: The "new()" is how solidity knows to deploy another contract ie you are calling another contract to be deployed in this particular contract... ie when you call this function, then the SimpleStorage contract will be deployed.
+        SimpleStorage simpleStorageContractVariable = new SimpleStorage(); // Hint: The "new()" keyword is how solidity knows to deploy another contract ie you are calling another contract to be deployed in this particular contract... ie when you call this function, then the SimpleStorage contract will be deployed.
         // SimpleStorage simpleStorage = new SimpleStorage();
 
         // Updating the array
