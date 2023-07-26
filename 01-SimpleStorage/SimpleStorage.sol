@@ -23,18 +23,19 @@ contract SimpleStorage {
     // Maps someones name to FavoriteNumber
     mapping(string => uint256) public nameToFavoriteNumber; // Mapping is like a dictionary, it has key-value pair and with each key you can get access to a specific value... Hint: Always give your variables descriptives names, just as we have here "nameToFavoriteNumber"
 
-    // function that stores and updates myFavoriteNumber.... Hint: Everytime you updates the state of a blockchain, is going to cost gas.
+    // function that takes input from the user and then stores and updates myFavoriteNumber.... Hint: Everytime you updates the state of a blockchain, is going to cost gas.
     function store(uint256 _favoriteNumber) public {
         myFavoriteNumber = _favoriteNumber;
     }
 
     /**
-     * View and Pure
+     * VIEW AND PURE
+     *
      * View disallows updating state, it only allows to Read from the state.
      *
      * Pure disallows both Updating and Reading from state.
      *
-     * Thus calling view and pure doesn't cost gas. They don't send transactions.
+     * Hint: Thus calling view and pure doesn't cost gas. They don't send transactions.
      */
 
     // function that allows user to retrieve myFavoriteNumber ie Reading (view) from the state.
