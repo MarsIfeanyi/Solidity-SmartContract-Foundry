@@ -62,12 +62,11 @@ forge script script/DeploySimpleStorage.s.sol
 
 Hint: in foundry when you did not define rpc url, it will spin up a temporary anvil blockchain node
 
-forge script sc
-ript/DeploySimpleStorage.s.sol --rpc-url http://127.0.0.1:8545 --broadcast --private-key
+forge script script/DeploySimpleStorage.s.sol --rpc-url http://127.0.0.1:8545 --broadcast --private-key
 
 # Adding env
 
-source .env... This ensures that all our .env file is loaded.
+source .env, This ensures that all our .env file is loaded.
 
 echo $PRIVATE_KEY
 
@@ -75,19 +74,21 @@ echo $PRIVATE_KEY
 
 npx thirdweb deploy
 
-Hint: With thirdweb, you can't is automatically verified
+Hint: With thirdweb, your contract is automatically verified
 
 # Interacting with the contract from anvil cli
 
 cast --help, gives you all the available commands in cast.
 
-# Deploying a Testnet
+# Deploying to a Testnet
 
 forge script script/DeploySimpleStorage.s.sol --rpc-url $SEPOLIA_RPC_URL --private-key $PRIVATE_KEY --broadcast
 
-Automatic format the solidity codes
+# Automatically format the solidity codes
+
 forge fmt
 
-Hint: Forge is used to deploy contract
-anvil gives us local blockchain nodes
-cast is used to interact with the deployed contract
+Hint: When working with Foundry
+Forge is used to deploy contract
+Anvil gives us local blockchain nodes
+Cast is used to interact with the deployed contract
