@@ -1,9 +1,15 @@
 // SPDX-License-Identifier: MIT
 
-// 1. Deploy mocks when we are on a local anvil chain
-// 2. Keep track of contract address across different chains
-// Sepolia ETH/USD
-// Mainnet ETH/USD
+/**
+ * In this HelperConfig, we want to do two things:
+ *
+ * 1. Deploy mocks when we are on a local anvil chain
+ * 2. Keep track of contract address across different chains
+ *
+ * Sepolia ETH/USD
+ *
+ *Mainnet ETH/USD
+ */
 
 pragma solidity >=0.7.0 <0.9.0;
 
@@ -18,14 +24,16 @@ contract HelperConfig is Script {
     // if we are on a local anvil, we deploy to mocks otherwise, grab the existing address from the live network
     NetworkConfig public activeNetworkConfig;
 
-    uint8 public constant DECIMALS = 8;
+    uint8 public constant DECIMALS = 8; // Hint: The decimals of ETH/USD is 8
     int256 public constant INITIAL_PRICE = 2000e8;
+    uint256 public constant SEPOLIA_CHAINID = 11155111;
+    uint8 public constant ETHMAINNET_CHAINID = 1;
 
     constructor() {
-        // block.chainid is a global varaible in solidity
-        if (block.chainid == 11155111) {
+        // block.chainid is a global varaible in solidity... chainid = current chainid.
+        if (block.chainid == SEPOLIA_CHAINID) {
             activeNetworkConfig = getSepoliaEthConfig();
-        } else if (block.chainid == 1) {
+        } else if (block.chainid == ETHMAINNET_CHAINID) {
             activeNetworkConfig = getMainnetEthConfig();
         } else {
             activeNetworkConfig = getOrCreateAnvilEthConfig();
@@ -48,6 +56,7 @@ contract HelperConfig is Script {
     }
 
     function getOrCreateAnvilEthConfig() public returns (NetworkConfig memory) {
+        // if the priceFeed is not zero, then that means the mock already has priceFeed deployed, thus return activeNetworkConfig,  else deploy a mockPriceFeed
         if (activeNetworkConfig.priceFeed != address(0)) {
             return activeNetworkConfig;
         }
