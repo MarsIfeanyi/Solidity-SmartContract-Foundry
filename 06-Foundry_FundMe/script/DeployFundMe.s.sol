@@ -7,8 +7,9 @@ import {FundMe} from "../src/FundMe.sol";
 import {HelperConfig} from "./HelperConfig.s.sol";
 
 contract DeployFundMe is Script {
+    //Hint: Note that the run() returns a FundMe Contract, this allows us to easily use and run the FundMe contract in our test file and other places where it is needed.
     function run() external returns (FundMe) {
-        // Before startBroadcast -> Not a "real" tx
+        // Before startBroadcast -> Not a "real" tx ie anything before the startBroadcast is not going to be send as a real transaction, thus wouldn't cost gas.It will be simulated in a simulation environment
         HelperConfig helperConfig = new HelperConfig();
 
         address ethUsdPriceFeed = helperConfig.activeNetworkConfig();
