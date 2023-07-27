@@ -11,6 +11,8 @@ contract FundMe {
 
     // Hint: storage variables should start with s_variableName... VIP private variables are more gas efficient than public variables, thus we want to default all storage variables as private.
 
+    //Hint: Constant and immutable variables don't take up storage slot, ie they are not stored in storage, because they are part of the bytecode.
+
     mapping(address => uint256) private s_addressToAmountFunded; // Hint: address is the key, while uint256 is the amount
 
     // Hint: You can also name your mapping
@@ -49,6 +51,24 @@ contract FundMe {
         _;
     }
 
+    // Reading from storage everytime while going through the loop cost gas. here we want to optimize and read from storage once
+    function cheaperWithdraw() public onlyOwner {
+        uint256 fundersLength = s_funders.length; //Here we are reading the lenght from memory.
+        for (
+            uint256 funderIndex = 0;
+            funderIndex < fundersLength;
+            funderIndex++
+        ) {
+            address funder = s_funders[funderIndex];
+            s_addressToAmountFunded[funder] = 0;
+        }
+        s_funders = new address[](0);
+        (bool callSuccess, ) = payable(msg.sender).call{
+            value: address(this).balance
+        }("");
+        require(callSuccess, "Call failed");
+    }
+
     function withdraw() public onlyOwner {
         for (
             /*Starting index, Ending index, Step amount*/
@@ -78,6 +98,8 @@ contract FundMe {
     }
 
     /**
+     * GETTERS
+     *
      * View / Pure functions (Getters)
      */
 
