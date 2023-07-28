@@ -11,29 +11,22 @@ contract FundMe {
 
     mapping(address => uint256) private s_addressToAmountFunded;
     address[] private s_funders;
-
     address private immutable i_owner;
     uint256 public constant MINIMUM_USD = 5 * 10 ** 18; // 5 * 1e18
 
     AggregatorV3Interface private s_priceFeed;
 
     constructor(address priceFeed) {
+        // Initializing the state/storage variables
         i_owner = msg.sender;
         s_priceFeed = AggregatorV3Interface(priceFeed);
     }
 
     function fund() public payable {
-        require(
-            msg.value.getConversionRate(s_priceFeed) >= MINIMUM_USD,
-            "You need to spend more ETH!"
-        );
+        require(msg.value.getConversionRate(s_priceFeed) >= MINIMUM_USD, "You need to spend more ETH!");
 
         s_addressToAmountFunded[msg.sender] += msg.value;
-        s_funders.push(msg.sender);
-    }
-
-    function getVersion() public view returns (uint256) {
-        return s_priceFeed.version();
+        s_funders.push(msg.sender); // adds to the funder to the array of funders.
     }
 
     modifier onlyOwner() {
@@ -41,22 +34,26 @@ contract FundMe {
         _;
     }
 
+    function cheaperWithdraw() public onlyOwner {
+        address[] memory funders = s_funders;
+        for (uint256 funderIndex = 0; funderIndex < funders.length; funderIndex++) {
+            address funder = s_funders[funderIndex];
+            s_addressToAmountFunded[funder] = 0;
+        }
+        s_funders = new address[](0);
+        (bool callSuccess,) = payable(msg.sender).call{value: address(this).balance}("");
+        require(callSuccess, "Call failed");
+    }
+
     function withdraw() public onlyOwner {
-        for (
-            uint256 funderIndex = 0;
-            funderIndex < s_funders.length;
-            funderIndex++
-        ) {
+        for (uint256 funderIndex = 0; funderIndex < s_funders.length; funderIndex++) {
             address funder = s_funders[funderIndex]; // accessing the indexes in the s_funders array
             s_addressToAmountFunded[funder] = 0; // resetting the mapping.ie we reset everything back to zero after withdrawing.
         }
 
         s_funders = new address[](0); // resetting the array
 
-        // call... Hint: Call forwards all gas or set gas, returns bool
-        (bool callSuccess, ) = payable(msg.sender).call{
-            value: address(this).balance
-        }("");
+        (bool callSuccess,) = payable(msg.sender).call{value: address(this).balance}("");
         require(callSuccess, "Call failed");
     }
 
@@ -69,12 +66,12 @@ contract FundMe {
     }
 
     /**
+     * GETTERS
+     *
      * View / Pure functions (Getters)
      */
 
-    function getAddressToAmountFunded(
-        address fundingAddress
-    ) external view returns (uint256) {
+    function getAddressToAmountFunded(address fundingAddress) external view returns (uint256) {
         return s_addressToAmountFunded[fundingAddress]; // VIP: Given address(fundingAddress) as the "Key", then get the value(amountFunded)
     }
 
@@ -84,5 +81,9 @@ contract FundMe {
 
     function getOwner() external view returns (address) {
         return i_owner;
+    }
+
+    function getVersion() public view returns (uint256) {
+        return s_priceFeed.version();
     }
 }
