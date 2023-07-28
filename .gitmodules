@@ -10,3 +10,6 @@
 [submodule "06-Foundry_FundMe/lib/foundry-devops"]
 	path = 06-Foundry_FundMe/lib/foundry-devops
 	url = https://github.com/Cyfrin/foundry-devops
+[submodule "08-SmartContract_Lottery/lib/forge-std"]
+	path = 08-SmartContract_Lottery/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
