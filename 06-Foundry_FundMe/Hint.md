@@ -19,16 +19,65 @@ forge test
 
 # Forked Testing
 
-forge test -m testPriceFeedVersionIsAccurate -vvv --forked-url $SEPOLIA_RPC_URL
+forge test --match-test testPriceFeedVersionIsAccurate -vvv --forked-url $SEPOLIA_RPC_URL
+
+OR
+
+forge test --mt testPriceFeedVersionIsAccurate -vvv --forked-url $SEPOLIA_RPC_URL
+
+Hint: The -vvv specifies the visibility of the logging.
 
 # To see how much of our code is tested
 
 forge coverage --fork-url $SEPOLIA_RPC_URL
 
+OR
+
+forge coverage
+
 # Testing
 
 forge test --fork-url $SEPOLIA_RPC_URL
 
-# ChainList
+# List of all Chains(ChainList)
 
 https://chainlist.org/
+
+# Bring up Chisel
+
+chisel
+
+# Getting all commands available on Chisel
+
+!help
+
+# To Clear the terminal while on chisel
+
+ctrl+k
+
+# Inspecting the Storage Layout
+
+forge inspect FundMe storageLayout
+
+# Checking the Opcodes
+
+https://www.evm.codes/?fork=shanghai
+
+# Creating a snapshot that shows gas usage
+
+forge snapshot
+
+# Script that help us to grab the most recently deployed contract
+
+forge install Cyfrin/foundry-devops --no-commit
+
+https://github.com/Cyfrin/foundry-devops
+
+# Using cast to verifying that the function metamask is calling in your contract is the actual function
+
+This helps us to be sure that the function that is being called when you are interacting with you contract is the real function and not a different or malicious function.
+
+- cast sig "nameOfTheFunction()"
+- cast sig "fund()"
+
+Thus when you run the above command, it generates a HexData, then compare this Hex with the Hex from metamask.
