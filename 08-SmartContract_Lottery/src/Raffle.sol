@@ -34,8 +34,8 @@ import {AutomationCompatibleInterface} from "@chainlink/contracts/src/v0.8/inter
  * @notice This contract is for creating a sample Raffle
  * @dev Implements Chainlink VRFv2
  */
-contract Raffle is VRFConsumerBaseV2 {
-    /* Errors */
+contract Raffle is VRFConsumerBaseV2, AutomationCompatibleInterface {
+    /* CUSTOM ERRORS */
     error Raffle__NotEnoughEthSent();
     error Raffle__TransferFailed();
     error Raffle__RaffleNotOpen();
@@ -45,7 +45,8 @@ contract Raffle is VRFConsumerBaseV2 {
         uint256 raffleState
     );
 
-    /** Type Declaration */
+    /** TYPE DECLARATIONS */
+    // Hint: enum is a user defined type
     enum RaffleState {
         OPEN, // 0
         CALCULATING // 1
@@ -55,7 +56,8 @@ contract Raffle is VRFConsumerBaseV2 {
         // Hint: The values defined in enum are zero based indexed
     }
 
-    /** State Variables */
+    /** STATE VARIABLES */
+
     uint16 private constant REQUEST_CONFIRMATIONS = 3;
     uint32 private constant NUM_WORDS = 1;
 
@@ -66,13 +68,14 @@ contract Raffle is VRFConsumerBaseV2 {
     uint64 private immutable i_subscriptionId;
     uint32 private immutable i_callbackGasLimit;
 
-    // What data structure should we use? How to keep track of all the players?... Ans: We are going to use dynamic array because if we use mapping we can loop through mapping.
-    address payable[] private s_players;
+    // What data structure should we use? How to keep track of all the players?... Ans: We are going to use dynamic array because if we use mapping we can't loop through mapping... mapping it not iterable.
+    address payable[] private s_players; // dynamic array
     uint256 private s_lastTimeStamp;
     address private s_recentWinner;
     RaffleState private s_raffleState; // creating a new variable of the enum type
 
-    /** Events
+    /**
+     * EVENTS
      *
      * You can have upto 3 indexed parameters.
      * Indexed parameters are also known as Topics. indexed parameters are searchable
@@ -111,7 +114,7 @@ contract Raffle is VRFConsumerBaseV2 {
             revert Raffle__NotEnoughEthSent();
         } // Hint: This is more gas efficient
 
-        // A player can only enter the raffle is the raffle is still open
+        // A player can only enter the raffle if the raffle is still open
         if (s_raffleState != RaffleState.OPEN) {
             revert Raffle__RaffleNotOpen();
         }
@@ -151,7 +154,7 @@ contract Raffle is VRFConsumerBaseV2 {
 
     /**
      * @dev Implements Chainlink automations
-     * @notice The pickWinner() with be automatically called using Chainlink automatically. we don't want an individual to be calling this function.
+     * @notice The pickWinner() will be automatically called using Chainlink. we don't want an individual to be calling this function.
      *
      * https://docs.chain.link/chainlink-automation/introduction
      *
@@ -212,7 +215,7 @@ contract Raffle is VRFConsumerBaseV2 {
         /**
          * s_players =10
          *  rng =12
-         * 12 % 10 =2 ie 12 mod 10 =2, thus the player at index 2 is the winner
+         * 12 % 10 =2 ie 12 mod 10 = 2, thus the player at index 2 is the winner
          */
         uint256 indexOfWinner = randomWords[0] % s_players.length;
         address payable winner = s_players[indexOfWinner];
@@ -245,5 +248,17 @@ contract Raffle is VRFConsumerBaseV2 {
 
     function getPlayer(uint256 indexOfPlayer) external view returns (address) {
         return s_players[indexOfPlayer];
+    }
+
+    function getRecentWinner() external view returns (address) {
+        return s_recentWinner;
+    }
+
+    function getLengthOfPlayers() external view returns (uint256) {
+        return s_players.length;
+    }
+
+    function getLastTimeStamp() external view returns (uint256) {
+        return s_lastTimeStamp;
     }
 }
