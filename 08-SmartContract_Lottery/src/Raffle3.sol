@@ -31,7 +31,7 @@ import {AutomationCompatibleInterface} from "@chainlink/contracts/src/v0.8/inter
  * @notice This contract is for creating a sample raffle contract
  * @dev This implements the Chainlink VRF Version 2
  */
-contract Raffle is VRFConsumerBaseV2, AutomationCompatibleInterface {
+contract Raffle3 is VRFConsumerBaseV2, AutomationCompatibleInterface {
     /* Errors */
     error Raffle__UpkeepNotNeeded(
         uint256 currentBalance,
